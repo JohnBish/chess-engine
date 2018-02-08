@@ -35,10 +35,7 @@ public class Pawn extends Piece{
         }
         if(!hasMoved) {
             if(unSignedDeltaY == 2 && unSignedDeltaX == 0) {
-                if(Main.board[x][yPos + (y - this.yPos) / 2] != null) {
-                    return false;
-                }
-                return true; //Pawn can move 2 squares if it hasn't moved yet
+                return Main.board[x][yPos + (y - this.yPos) / 2] == null;
             }
         }
         return unSignedDeltaY == 1 && unSignedDeltaX == 0; //Standard Pawn move
