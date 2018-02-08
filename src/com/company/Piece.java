@@ -6,7 +6,7 @@ public class Piece {
     boolean isWhite;
     boolean hasMoved = false;
 
-    public Piece(boolean w, int x, int y) {
+    Piece(boolean w, int x, int y) {
         this.isWhite = w;
         this.xPos = x;
         this.yPos = y;
