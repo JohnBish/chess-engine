@@ -15,22 +15,14 @@ public class King extends Piece{
 
     @Override
     public boolean checkValidMove(int x, int y) {
-        int deltaX;
-        int deltaY;
-        if (isWhite) {
-            deltaX = x - this.xPos;
-            deltaY = y - this.yPos;
-        } else {
-            deltaX = this.xPos - x;
-            deltaY = this.yPos - y;
-        }
+        int deltaX = x - xPos;
+        int deltaY = y - xPos;
         if (x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         if (Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
         }
         if(deltaX == 0 && deltaY == 0) return false;
         if(Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1) {
-            System.out.println("Hi");
             return !inCheck(x, y);
         }
         return false;

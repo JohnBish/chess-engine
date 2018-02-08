@@ -15,20 +15,13 @@ public class Knight extends Piece{
 
     @Override
     public boolean checkValidMove(int x, int y) {
-        int deltaX;
-        int deltaY;
-        if(isWhite) {
-            deltaX = x - this.xPos;
-            deltaY = y - this.yPos;
-        } else {
-            deltaX = this.xPos - x;
-            deltaY = this.yPos - y;
-        }
+        int deltaX = x - xPos;
+        int deltaY = y - xPos;
         if(x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         if(Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
         }
-        if((Math.abs(deltaX) == 2 && deltaY == 1) || (Math.abs(deltaX) == 1 && deltaY == 2)) {
+        if((Math.abs(deltaX) == 2 && Math.abs(deltaY) == 1) || (Math.abs(deltaX) == 1 && Math.abs(deltaY) == 2)) {
             return true; //Standard Knight move
         }
         return false;

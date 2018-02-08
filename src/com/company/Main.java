@@ -60,9 +60,9 @@ public class Main {
         int[] KingCoords = {4, 0, 3, 7}; //Keeps coordinates of Kings. White's coords are first
         renderBoard();
         while(true) {
-            if(board[KingCoords[turn ? 0:2]][KingCoords[turn ? 1:3]].inCheck(turn ? 0:2, turn ? 1:3)) {
+            if(board[KingCoords[turn ? 0:2]][KingCoords[turn ? 1:3]].inCheck(KingCoords[turn ? 0:2], KingCoords[turn ? 1:3])) {
                 inCheck = true;
-                //System.out.println("Check!");
+                System.out.println("Check!");
             }
             System.out.println(COLOURS.get(turn) + "'s turn:");
             String rawMove = sc.nextLine(); //Gets next move in algebraic notation
@@ -85,7 +85,7 @@ public class Main {
                 renderBoard();
                 if(board[moveCoords[0]][moveCoords[1]] instanceof King) {
                     KingCoords[turn ? 0:2] = moveCoords[0];
-                    KingCoords[turn ? 1:3] = moveCoords[0];
+                    KingCoords[turn ? 1:3] = moveCoords[1];
                 }
                 turn = !turn;
             } else {
@@ -94,7 +94,7 @@ public class Main {
         }
     }
 
-    public static void renderBoard() {
+    private static void renderBoard() {
         System.out.println("  a b c d e f g h");
         for(int i=board.length - 1; i >=0; i--) {
             System.out.print(i + 1 + " ");
@@ -112,9 +112,8 @@ public class Main {
     }
 
     private static int[] parseCoords(String m) {
-        int[] parsed = {LETTERS.get(m.substring(0, 1)),
+        return new int[] {LETTERS.get(m.substring(0, 1)),
                 Integer.parseInt(m.substring(1, 2)) - 1};
-        return parsed;
     }
 
     private static String stripRawMove(String m) {

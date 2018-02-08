@@ -15,15 +15,8 @@ public class Bishop extends Piece{
 
     @Override
     public boolean checkValidMove(int x, int y) {
-        int deltaX;
-        int deltaY;
-        if(isWhite) {
-            deltaX = x - this.xPos;
-            deltaY = y - this.yPos;
-        } else {
-            deltaX = this.xPos - x;
-            deltaY = this.yPos - y;
-        }
+        int deltaX = x - xPos;
+        int deltaY = y - xPos;
         if(x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         if(Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
@@ -31,7 +24,7 @@ public class Bishop extends Piece{
         if(deltaX == 0 && deltaY == 0) return false;
         if(Math.abs(deltaY) == Math.abs(deltaX)) { //If move is diagonal
             for(int i=1; i<Math.abs(deltaY); i++) {
-                if(Main.board[xPos + i * -(x / Math.abs(x))][yPos + i * ((this.isWhite) ? 1:-1)] != null) {
+                if(Main.board[xPos + i * (deltaX / Math.abs(deltaX))][yPos + i * (deltaY / Math.abs(deltaY))] != null) {
                     return false; //Checks if any piece is in the way of Bishop's path
                 }
             }
