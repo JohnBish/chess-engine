@@ -103,7 +103,7 @@ public class Main {
                 if(board[j][i] != null) {
                     System.out.print(board[j][i].toString());
                 } else {
-                    System.out.print("  ");
+                    System.out.print("- ");
                 }
             }
             System.out.print(i + 1);
