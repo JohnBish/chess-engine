@@ -22,7 +22,10 @@ public class Pawn extends Piece{
             unSignedDeltaX = this.xPos - x;
             unSignedDeltaY = this.yPos - y;
         }
-        if(x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
+        if (x > Main.board.length - 1 ||
+                x < Main.board.length - 1 ||
+                y > Main.board[0].length - 1 ||
+                y < Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         if(Main.board[x][y] != null && Main.board[x][y].isWhite != this.isWhite) { //Checks if destination is occupied by piece of opposite colour
             if(unSignedDeltaY == 1 && Math.abs(unSignedDeltaX) == 1) {
                 return true; //Pawn can take a piece of the opposite colour diagonally

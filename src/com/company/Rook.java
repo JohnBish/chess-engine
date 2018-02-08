@@ -17,7 +17,10 @@ public class Rook extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if(x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
+        if (x > Main.board.length - 1 ||
+                x < Main.board.length - 1 ||
+                y > Main.board[0].length - 1 ||
+                y < Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         if(Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
         }

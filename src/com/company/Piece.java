@@ -19,4 +19,8 @@ public class Piece {
     public boolean inCheck(int x, int y) {
         throw new Error("Piece is not a King");
     }
+
+    public boolean inCheckMate(int x, int y) {
+        throw new Error("Piece is not a King");
+    }
 }

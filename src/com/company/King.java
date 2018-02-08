@@ -17,7 +17,10 @@ public class King extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if (x > Main.board.length - 1 || y > Main.board[0].length - 1) return false; //Checks if piece is out of bounds
+        if (x > Main.board.length - 1 ||
+                x < Main.board.length - 1 ||
+                y > Main.board[0].length - 1 ||
+                y < Main.board[0].length - 1) return false; //Checks if piece is out of bounds
         //Checks if destination is already occupied by another piece of same colour
         return (Main.board[x][y] == null ||
                 Main.board[x][y].isWhite != this.isWhite) &&
@@ -38,5 +41,15 @@ public class King extends Piece{
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean inCheckMate(int x, int y) {
+        for(int dx = -1; dx <= 1; dx++) {
+            for(int dy = -1; dy <= 1; dy++) {
+                //Magic goes here
+            }
+        }
+        return true;
     }
 }
