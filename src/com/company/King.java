@@ -18,9 +18,9 @@ public class King extends Piece{
         int deltaX = x - xPos;
         int deltaY = y - yPos;
         if (x > Main.board.length - 1 ||
-                x < Main.board.length - 1 ||
+                x < 0 ||
                 y > Main.board[0].length - 1 ||
-                y < Main.board[0].length - 1) return false; //Checks if piece is out of bounds
+                y < 0) return false; //Checks if piece is out of bounds
         //Checks if destination is already occupied by another piece of same colour
         return (Main.board[x][y] == null ||
                 Main.board[x][y].isWhite != this.isWhite) &&
