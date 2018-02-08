@@ -1,7 +1,5 @@
 package com.company;
 
-import com.company.Piece;
-
 public class Pawn extends Piece{
     Pawn(boolean w, int x, int y) { super(w, x, y); }
 

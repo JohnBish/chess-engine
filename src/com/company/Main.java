@@ -22,6 +22,7 @@ public class Main {
 
     public static Piece[][] board;
     private static Scanner sc = new Scanner(System.in);
+    private static int[] kingCoords = {4, 0, 3, 7}; //Keeps coordinates of Kings. White's coords are first
 
     public static void main(String[] args) {
         board = initBoard();
@@ -56,11 +57,10 @@ public class Main {
 
     private static void mainLoop() {
         boolean turn = true; //White's turn is true, black's turn is false
-        boolean inCheck;
-        int[] KingCoords = {4, 0, 3, 7}; //Keeps coordinates of Kings. White's coords are first
+        boolean inCheck = false;
         renderBoard();
         while(true) {
-            if(board[KingCoords[turn ? 0:2]][KingCoords[turn ? 1:3]].inCheck(KingCoords[turn ? 0:2], KingCoords[turn ? 1:3])) {
+            if(board[kingCoords[turn ? 0:2]][kingCoords[turn ? 1:3]].inCheck(kingCoords[turn ? 0:2], kingCoords[turn ? 1:3])) {
                 inCheck = true;
                 System.out.println("Check!");
             }
@@ -77,15 +77,16 @@ public class Main {
             System.out.print("\n");
             if(board[pieceCoords[0]][pieceCoords[1]] != null &&
                     board[pieceCoords[0]][pieceCoords[1]].isWhite == turn &&
-                    board[pieceCoords[0]][pieceCoords[1]].checkValidMove(moveCoords[0], moveCoords[1])) {
+                    board[pieceCoords[0]][pieceCoords[1]].checkValidMove(moveCoords[0], moveCoords[1]) &&
+                    checkValidPlay(inCheck, turn, moveCoords[0], moveCoords[1])) {
                 board[pieceCoords[0]][pieceCoords[1]].xPos = moveCoords[0];
                 board[pieceCoords[0]][pieceCoords[1]].yPos = moveCoords[1];
                 board[moveCoords[0]][moveCoords[1]] = board[pieceCoords[0]][pieceCoords[1]];
                 board[pieceCoords[0]][pieceCoords[1]] = null;
                 renderBoard();
                 if(board[moveCoords[0]][moveCoords[1]] instanceof King) {
-                    KingCoords[turn ? 0:2] = moveCoords[0];
-                    KingCoords[turn ? 1:3] = moveCoords[1];
+                    kingCoords[turn ? 0:2] = moveCoords[0];
+                    kingCoords[turn ? 1:3] = moveCoords[1];
                 }
                 turn = !turn;
             } else {
@@ -143,5 +144,20 @@ public class Main {
             m = m.substring(1);
         }
         return m;
+    }
+
+    private static boolean checkValidPlay(boolean c, boolean t, int x, int y) {
+        if(c) {
+            Piece temp = board[x][y]; //Stores piece at move location to replace later
+            board[x][y] = new Piece(t, x, y);
+            if(board[kingCoords[t ? 0:2]][kingCoords[t ? 1:3]].inCheck(kingCoords[t ? 0:2], kingCoords[t ? 1:3])) {
+                board[x][y] = temp;
+                return false;
+            }
+            board[x][y] = temp;
+            return true;
+        } else {
+            return true;
+        }
     }
 }
