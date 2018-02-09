@@ -1,6 +1,7 @@
 package com.company;
 
 public class Bishop extends Piece{
+
     Bishop(boolean w, int x, int y) {
         super(w, x, y);
     }

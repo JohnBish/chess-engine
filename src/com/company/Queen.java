@@ -1,6 +1,7 @@
 package com.company;
 
 public class Queen extends Piece{
+
     Queen(boolean w, int x, int y) {
         super(w, x, y);
     }

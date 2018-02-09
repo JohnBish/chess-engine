@@ -5,6 +5,7 @@ public class Piece {
     public int yPos;
     public boolean isWhite;
     public boolean hasMoved;
+    public boolean passantable;
 
     Piece(boolean w, int x, int y) {
         this.isWhite = w;

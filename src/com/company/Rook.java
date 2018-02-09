@@ -1,6 +1,7 @@
 package com.company;
 
 public class Rook extends Piece{
+
     Rook(boolean w, int x, int y) {
         super(w, x, y);
     }
