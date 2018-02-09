@@ -27,15 +27,34 @@ public class King extends Piece{
                 y > Main.board[0].length - 1 ||
                 y < 0) return false; //Checks if piece is out of bounds
         //Checks if destination is already occupied by another piece of same colour
-        return (Main.board[x][y] == null ||
-                Main.board[x][y].isWhite != this.isWhite) &&
-                (deltaX != 0 || deltaY != 0) &&
-                Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1 && //King can move one square in any direction
-                !inCheck(x, y); //Not in check
+        if (Main.board[x][y] == null ||
+                Main.board[x][y].isWhite != this.isWhite) if (deltaX != 0 || deltaY != 0)
+            if (Math.abs(deltaX) <= 1) {
+                if (Math.abs(deltaY) <= 1) { //Standard King move
+                    return !inCheck(x, y); //Can't move into check
+                }
+            } else if(Math.abs(deltaX) == 2 && deltaY == 0) {
+                boolean validCastle = !hasMoved &&  //Checks if castle is valid
+                        Main.board[xPos + deltaX / Math.abs(deltaX)][yPos] == null &&
+                        !inCheck(xPos + deltaX / Math.abs(deltaX), yPos) &&
+                        Main.board[xPos + 2 * (deltaX / Math.abs(deltaX))][yPos] == null &&
+                        !inCheck(xPos + 2 * (deltaX / Math.abs(deltaX)), yPos) &&
+                        (Main.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] == null) ||
+                        (Main.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] instanceof Rook) &&
+                                Main.board[(deltaX > 0) ? 7:0][yPos] instanceof Rook &&
+                                !(Main.board[(deltaX > 0) ? 7:0][yPos].hasMoved);
+                if(validCastle) {
+                    Main.board[(deltaX > 0) ? 5:3][yPos] = Main.board[(deltaX > 0) ? 7:0][yPos];
+                    Main.board[(deltaX > 0) ? 7:0][yPos] = null;
+                    System.out.println(Main.COLOURS.get(isWhite) + " castles!");
+                    return true; //Castles
+                }
+            }
+        return false;
     }
 
     @Override
-    public boolean inCheck(int x, int y) { //Checks if King is in check
+    public boolean inCheck(int x, int y) { //Checks if specified coordinates are threatened
         threatening.clear();
         for(int i=Main.board.length - 1; i >= 0; i--) {
             for(int j=0; j<Main.board[0].length; j++) {

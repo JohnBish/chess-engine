@@ -15,14 +15,14 @@ public class Main {
         put("g", 6);
         put("h", 7);
     }};
-    private static final Map<Boolean, String> COLOURS = new HashMap<Boolean, String>() {{
+    public static final Map<Boolean, String> COLOURS = new HashMap<Boolean, String>() {{
         put(true, "White");
         put(false, "Black");
     }};
 
     public static Piece[][] board;
     private static Scanner sc = new Scanner(System.in);
-    private static int[] kingCoords = {4, 0, 3, 7}; //Keeps coordinates of Kings. White's coords are first
+    private static int[] kingCoords = {4, 0, 4, 7}; //Keeps coordinates of Kings. White's coords are first
 
     public static void main(String[] args) {
         board = initBoard();
@@ -50,8 +50,8 @@ public class Main {
         b[5][7] = new Bishop(false, 5, 7);
         b[4][0] = new King(true, 4, 0 );
         b[3][0] = new Queen(true, 3, 0);
-        b[3][7] = new King(false, 3, 7);
-        b[4][7] = new Queen(false,  4, 7);
+        b[4][7] = new King(false, 4, 7);
+        b[3][7] = new Queen(false,  3, 7);
         return b;
     }
 
@@ -86,6 +86,7 @@ public class Main {
                 board[pieceCoords[0]][pieceCoords[1]].xPos = moveCoords[0];
                 board[pieceCoords[0]][pieceCoords[1]].yPos = moveCoords[1];
                 board[moveCoords[0]][moveCoords[1]] = board[pieceCoords[0]][pieceCoords[1]];
+                board[moveCoords[0]][moveCoords[1]].hasMoved = true;
                 board[pieceCoords[0]][pieceCoords[1]] = null;
                 renderBoard();
                 if(board[moveCoords[0]][moveCoords[1]] instanceof King) {
@@ -105,7 +106,7 @@ public class Main {
             System.out.print(i + 1 + " ");
             for(int j=0; j<board[0].length; j++) {
                 if(board[j][i] != null) {
-                    System.out.print(board[j][i].toString());
+                    System.out.print(board[j][i]);
                 } else {
                     System.out.print("- ");
                 }
