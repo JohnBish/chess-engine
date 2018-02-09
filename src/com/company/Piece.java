@@ -1,15 +1,16 @@
 package com.company;
 
 public class Piece {
-    int xPos;
-    int yPos;
-    boolean isWhite;
-    boolean hasMoved = false;
+    public int xPos;
+    public int yPos;
+    public boolean isWhite;
+    public boolean hasMoved;
 
     Piece(boolean w, int x, int y) {
         this.isWhite = w;
         this.xPos = x;
         this.yPos = y;
+        hasMoved = false;
     }
 
     public boolean checkValidMove(int x, int y) {
@@ -20,7 +21,7 @@ public class Piece {
         throw new Error("Piece is not a King");
     }
 
-    public boolean inCheckMate(int x, int y) {
+    public boolean inCheckMate() {
         throw new Error("Piece is not a King");
     }
 }

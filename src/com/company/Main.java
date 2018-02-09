@@ -62,6 +62,10 @@ public class Main {
         while(true) {
             if(board[kingCoords[turn ? 0:2]][kingCoords[turn ? 1:3]].inCheck(kingCoords[turn ? 0:2], kingCoords[turn ? 1:3])) {
                 inCheck = true;
+                if(board[kingCoords[turn ? 0:2]][kingCoords[turn ? 1:3]].inCheckMate()) {
+                    System.out.println("Checkmate! " + COLOURS.get(!turn) + " wins.");
+                    return;
+                }
                 System.out.println("Check!");
             }
             System.out.println(COLOURS.get(turn) + "'s turn:");
