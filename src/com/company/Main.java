@@ -3,8 +3,17 @@ package com.company;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Main {
+    private static final Map<String, Class<? extends Piece>> PIECES = new HashMap<String, Class<? extends Piece>>() {{
+        put("k", King.class);
+        put("q", Queen.class);
+        put("r", Rook.class);
+        put("n", Knight.class);
+        put("b", Bishop.class);
+        put("p", Pawn.class);
+    }};
     private static final Map<String, Integer> LETTERS = new HashMap<String, Integer>() {{
         put("a", 0);
         put("b", 1);
@@ -14,6 +23,16 @@ public class Main {
         put("f", 5);
         put("g", 6);
         put("h", 7);
+    }};
+    private static final Map<Integer, String> NUMBERS = new HashMap<Integer, String>() {{
+        put(0, "a");
+        put(1, "b");
+        put(2, "c");
+        put(3, "d");
+        put(4, "e");
+        put(5, "f");
+        put(6, "g");
+        put(7, "h");
     }};
     public static final Map<Boolean, String> COLOURS = new HashMap<Boolean, String>() {{
         put(true, "White");
@@ -58,7 +77,7 @@ public class Main {
     private static void mainLoop() {
         boolean turn = true; //White's turn is true, black's turn is false
         boolean inCheck = false;
-        renderBoard();
+        renderBoard(true);
         while(true) {
             if(board[kingCoords[turn ? 0:2]][kingCoords[turn ? 1:3]].inCheck(kingCoords[turn ? 0:2], kingCoords[turn ? 1:3])) {
                 inCheck = true;
@@ -74,7 +93,7 @@ public class Main {
                 System.out.println("Thanks for playing");
                 return;
             }
-            rawMove = stripRawMove(rawMove);
+            rawMove = stripRawMove(turn, rawMove);
             int[] pieceCoords = parseCoords(rawMove); //Returns piece coords
             rawMove = stripLeadingCoord(rawMove);
             int[] moveCoords = parseCoords(rawMove); //Returns move location coords
@@ -88,21 +107,21 @@ public class Main {
                 board[moveCoords[0]][moveCoords[1]] = board[pieceCoords[0]][pieceCoords[1]];
                 board[moveCoords[0]][moveCoords[1]].hasMoved = true;
                 board[pieceCoords[0]][pieceCoords[1]] = null;
-                renderBoard();
                 if(board[moveCoords[0]][moveCoords[1]] instanceof King) {
                     kingCoords[turn ? 0:2] = moveCoords[0];
                     kingCoords[turn ? 1:3] = moveCoords[1];
                 }
                 turn = !turn;
+                renderBoard(turn);
             } else {
                 System.out.println("Invalid move");
             }
         }
     }
 
-    private static void renderBoard() {
+    private static void renderBoard(boolean t) {
         System.out.println("  a b c d e f g h");
-        for(int i=board.length - 1; i >=0; i--) {
+        for(int i=t ? board.length - 1:0; t ? i >= 0: i < board.length; i += t ? -1:1) {
             System.out.print(i + 1 + " ");
             for(int j=0; j<board[0].length; j++) {
                 if(board[j][i] != null) {
@@ -118,11 +137,22 @@ public class Main {
     }
 
     private static int[] parseCoords(String m) {
-        return new int[] {LETTERS.get(m.substring(0, 1)),
-                Integer.parseInt(m.substring(1, 2)) - 1};
+        if(m == null) {
+            return new int[] {0, 0};
+        }
+        int row;
+        try {
+            row = Integer.parseInt(m.substring(1, 2)) - 1;
+        }  catch(NumberFormatException e) {
+            return new int[] {0, 0};
+        }
+        if(LETTERS.containsKey(m.substring(0, 1))) {
+            return new int[] {LETTERS.get(m.substring(0, 1)), row};
+        }
+        return new int[] {0, 0};
     }
 
-    private static String stripRawMove(String m) {
+    private static String stripRawMove(boolean c, String m) {
         m = m.toLowerCase();
         m = m.replaceAll("\\s","");
         int isPawn;
@@ -138,17 +168,50 @@ public class Main {
             case "r":
             case "n":
             case "b":
-                m = m.substring(1);
+            case "p":
+                if(m.length() == 3) {
+                    ArrayList<Piece> instances = findPiecesByClass(c, PIECES.get(m.substring(0, 1)));
+                    int[] pieceCoords = parseCoords(m.substring(1));
+                    int numInstance = -1;
+                    for(int i=0; i<instances.size(); i++) {
+                        if(instances.get(i).checkValidMove(pieceCoords[0], pieceCoords[1])) {
+                            if(numInstance != -1) {
+                                System.out.println("Move is possible with more than one " + PIECES.get(m.substring(0, 1)).getSimpleName());
+                                return null;
+                            }
+                            numInstance = i;
+                        }
+                    }
+                    m = m.substring(1);
+                    m = NUMBERS.get(instances.get(numInstance).xPos) + (instances.get(numInstance).yPos + 1) + m;
+                } else {
+                    m = m.substring(1);
+                }
         }
         return m;
     }
 
     private static String stripLeadingCoord(String m) {
+        if(m == null) return null;
         m = m.substring(2);
         if(m.length() > 2) {
             m = m.substring(1);
         }
         return m;
+    }
+
+    private static ArrayList<Piece> findPiecesByClass(boolean c, Class<? extends Piece> p) {
+        ArrayList<Piece> instances = new ArrayList<>();
+        for(int i=board.length - 1; i >=0; i--) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[j][i] != null &&
+                        p.isInstance(board[j][i]) &&
+                        board[j][i].isWhite == c) {
+                    instances.add(board[j][i]);
+                }
+            }
+        }
+        return instances;
     }
 
     private static boolean checkValidPlay(boolean c, boolean t, int x, int y) {
