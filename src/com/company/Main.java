@@ -39,7 +39,7 @@ public class Main {
         put(false, "Black");
     }};
     private static final int[] BOARD_DIMENSIONS = new int[] {8, 8};
-    public static final String ANSI_BLACK_BACKGROUND = "\u001B[47m";
+    private static final String ANSI_BLACK_BACKGROUND = "\u001B[47m";
     private static final String ANSI_RESET = "\u001B[0m";
 
     public static Piece[][] board;
