@@ -18,22 +18,22 @@ public class Rook extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if (x > Main.board.length - 1 ||
+        if (x > Chess.board.length - 1 ||
                 x < 0 ||
-                y > Main.board[0].length - 1 ||
+                y > Chess.board[0].length - 1 ||
                 y < 0) return false; //Checks if piece is out of bounds
-        if(Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
+        if(Chess.board[x][y] != null && Chess.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
         }
         if(deltaX == 0 && deltaY == 0) return false;
         if(deltaY == 0) {
             for(int i=1; i<Math.abs(deltaX); i++) {
-                if(Main.board[xPos + i * (deltaX / Math.abs(deltaX))][yPos] != null) return false;
+                if(Chess.board[xPos + i * (deltaX / Math.abs(deltaX))][yPos] != null) return false;
             }
             return true;
         } else if(deltaX == 0) {
             for(int i=1; i<Math.abs(deltaY); i++) {
-                if(Main.board[xPos][yPos + i * (deltaY / Math.abs(deltaY))] != null) return false;
+                if(Chess.board[xPos][yPos + i * (deltaY / Math.abs(deltaY))] != null) return false;
             }
             return true;
         }

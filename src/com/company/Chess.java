@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Main {
+public class Chess {
     private static final Map<String, Class<? extends Piece>> PIECES = new HashMap<String, Class<? extends Piece>>() {{
         put("K", King.class);
         put("Q", Queen.class);
@@ -168,10 +168,16 @@ public class Main {
         m = m.replaceAll("\\+", "");
         if(m.length() == 1) {
             return null;
-        } else if(m.equals("O-O")) {
-            m = "e" + (c ? 1:8) + "g" + (c ? 1:8); //Kingside castle
-        } else if(m.equals("O-O-O")) {
-            m = "e" + (c ? 1:8) + "c" + (c ? 1:8); //Queenside castle
+        }
+        switch(m) {
+            case "":
+                return null;
+            case "O-O":
+                m = "e" + (c ? 1:8) + "g" + (c ? 1:8); //Kingside castle
+                break;
+            case "O-O-O":
+                m = "e" + (c ? 1:8) + "c" + (c ? 1:8); //Queenside castle
+                break;
         }
         int isPawn;
         try {

@@ -18,17 +18,17 @@ public class Bishop extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if (x > Main.board.length - 1 ||
+        if (x > Chess.board.length - 1 ||
                 x < 0 ||
-                y > Main.board[0].length - 1 ||
+                y > Chess.board[0].length - 1 ||
                 y < 0) return false; //Checks if piece is out of bounds
-        if(Main.board[x][y] != null && Main.board[x][y].isWhite == this.isWhite) {
+        if(Chess.board[x][y] != null && Chess.board[x][y].isWhite == this.isWhite) {
             return false; //Checks if destination is already occupied by another piece of same colour
         }
         if(deltaX == 0 && deltaY == 0) return false;
         if(Math.abs(deltaY) == Math.abs(deltaX)) { //If move is diagonal
             for(int i=1; i<Math.abs(deltaY); i++) {
-                if(Main.board[xPos + i * (deltaX / Math.abs(deltaX))][yPos + i * (deltaY / Math.abs(deltaY))] != null) {
+                if(Chess.board[xPos + i * (deltaX / Math.abs(deltaX))][yPos + i * (deltaY / Math.abs(deltaY))] != null) {
                     return false; //Checks if any piece is in the way of Bishop's path
                 }
             }

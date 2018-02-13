@@ -22,31 +22,31 @@ public class King extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if (x > Main.board.length - 1 ||
+        if (x > Chess.board.length - 1 ||
                 x < 0 ||
-                y > Main.board[0].length - 1 ||
+                y > Chess.board[0].length - 1 ||
                 y < 0) return false; //Checks if piece is out of bounds
         //Checks if destination is already occupied by another piece of same colour
-        if (Main.board[x][y] == null ||
-                Main.board[x][y].isWhite != this.isWhite) if (deltaX != 0 || deltaY != 0)
+        if (Chess.board[x][y] == null ||
+                Chess.board[x][y].isWhite != this.isWhite) if (deltaX != 0 || deltaY != 0)
             if (Math.abs(deltaX) <= 1) {
                 if (Math.abs(deltaY) <= 1) { //Standard King move
                     return !inCheck(x, y); //Can't move into check
                 }
             } else if(Math.abs(deltaX) == 2 && deltaY == 0) {
                 boolean validCastle = !hasMoved &&  //Checks if castle is valid
-                        Main.board[xPos + deltaX / Math.abs(deltaX)][yPos] == null &&
+                        Chess.board[xPos + deltaX / Math.abs(deltaX)][yPos] == null &&
                         !inCheck(xPos + deltaX / Math.abs(deltaX), yPos) &&
-                        Main.board[xPos + 2 * (deltaX / Math.abs(deltaX))][yPos] == null &&
+                        Chess.board[xPos + 2 * (deltaX / Math.abs(deltaX))][yPos] == null &&
                         !inCheck(xPos + 2 * (deltaX / Math.abs(deltaX)), yPos) &&
-                        (Main.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] == null) ||
-                        (Main.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] instanceof Rook) &&
-                                Main.board[(deltaX > 0) ? 7:0][yPos] instanceof Rook &&
-                                !(Main.board[(deltaX > 0) ? 7:0][yPos].hasMoved);
+                        (Chess.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] == null) ||
+                        (Chess.board[xPos + 3 * (deltaX / Math.abs(deltaX))][yPos] instanceof Rook) &&
+                                Chess.board[(deltaX > 0) ? 7:0][yPos] instanceof Rook &&
+                                !(Chess.board[(deltaX > 0) ? 7:0][yPos].hasMoved);
                 if(validCastle) {
-                    Main.board[(deltaX > 0) ? 5:3][yPos] = Main.board[(deltaX > 0) ? 7:0][yPos];
-                    Main.board[(deltaX > 0) ? 7:0][yPos] = null;
-                    System.out.println(Main.COLOURS.get(isWhite) + " castles!");
+                    Chess.board[(deltaX > 0) ? 5:3][yPos] = Chess.board[(deltaX > 0) ? 7:0][yPos];
+                    Chess.board[(deltaX > 0) ? 7:0][yPos] = null;
+                    System.out.println(Chess.COLOURS.get(isWhite) + " castles!");
                     return true; //Castles
                 }
             }
@@ -56,11 +56,11 @@ public class King extends Piece{
     @Override
     public boolean inCheck(int x, int y) { //Checks if specified coordinates are threatened
         threatening.clear();
-        for(int i=Main.board.length - 1; i >= 0; i--) {
-            for(int j=0; j<Main.board[0].length; j++) {
-                if(Main.board[j][i] != null && Main.board[j][i].isWhite != this.isWhite) {
-                    if(Main.board[j][i].checkValidMove(x, y)) {
-                        threatening.add(Main.board[j][i]);
+        for(int i = Chess.board.length - 1; i >= 0; i--) {
+            for(int j = 0; j< Chess.board[0].length; j++) {
+                if(Chess.board[j][i] != null && Chess.board[j][i].isWhite != this.isWhite) {
+                    if(Chess.board[j][i].checkValidMove(x, y)) {
+                        threatening.add(Chess.board[j][i]);
                     }
                 }
             }
@@ -99,10 +99,10 @@ public class King extends Piece{
                 }
             }
             for (int[] savingMove : savingMoves) {
-                for (int i = Main.board.length - 1; i >= 0; i--) {
-                    for (int j = 0; j < Main.board[0].length; j++) {
-                        if (Main.board[j][i] != null && Main.board[j][i].isWhite == this.isWhite) {
-                            if (Main.board[j][i].checkValidMove(savingMove[0], savingMove[1])) {
+                for (int i = Chess.board.length - 1; i >= 0; i--) {
+                    for (int j = 0; j < Chess.board[0].length; j++) {
+                        if (Chess.board[j][i] != null && Chess.board[j][i].isWhite == this.isWhite) {
+                            if (Chess.board[j][i].checkValidMove(savingMove[0], savingMove[1])) {
                                 return false;
                             }
                         }

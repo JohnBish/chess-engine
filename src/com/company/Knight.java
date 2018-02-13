@@ -18,13 +18,13 @@ public class Knight extends Piece{
     public boolean checkValidMove(int x, int y) {
         int deltaX = x - xPos;
         int deltaY = y - yPos;
-        if (x > Main.board.length - 1 ||
+        if (x > Chess.board.length - 1 ||
                 x < 0 ||
-                y > Main.board[0].length - 1 ||
+                y > Chess.board[0].length - 1 ||
                 y < 0) return false; //Checks if piece is out of bounds
         //Checks if destination is already occupied by another piece of same colour
-        return (Main.board[x][y] == null ||
-                Main.board[x][y].isWhite != this.isWhite) &&
+        return (Chess.board[x][y] == null ||
+                Chess.board[x][y].isWhite != this.isWhite) &&
                 ((Math.abs(deltaX) == 2 && Math.abs(deltaY) == 1) ||
                         (Math.abs(deltaX) == 1 && Math.abs(deltaY) == 2)); //Standard Knight move
     }
