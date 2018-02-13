@@ -166,6 +166,13 @@ public class Main {
         m = m.replaceAll("\\s", "");
         m = m.replaceAll("x", "");
         m = m.replaceAll("\\+", "");
+        if(m.length() == 1) {
+            return null;
+        } else if(m.equals("O-O")) {
+            m = "e" + (c ? 1:8) + "g" + (c ? 1:8); //Kingside castle
+        } else if(m.equals("O-O-O")) {
+            m = "e" + (c ? 1:8) + "c" + (c ? 1:8); //Queenside castle
+        }
         int isPawn;
         try {
             isPawn = Integer.parseInt(m.substring(1, 2));
@@ -181,10 +188,12 @@ public class Main {
                 case "B":
                 case "P":
                     ArrayList<Piece> instances = findPiecesByClass(c, PIECES.get(m.substring(0, 1)));
+                    m = m.toLowerCase();
                     int[] pieceCoords = parseCoords(m.substring(1));
                     int numInstance = -1;
                     for (int i = 0; i < instances.size(); i++) {
                         if (instances.get(i).checkValidMove(pieceCoords[0], pieceCoords[1])) {
+                            //Looks for a valid move with pieces of the specified type and colour
                             if (numInstance != -1) {
                                 System.out.println("Move is possible with more than one " + PIECES.get(m.substring(0, 1)).getSimpleName());
                                 return null;
