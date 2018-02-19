@@ -1,6 +1,6 @@
 package com.company;
 
-public class Piece {
+public abstract class Piece {
     public int xPos;
     public int yPos;
     public boolean isWhite;
@@ -14,9 +14,7 @@ public class Piece {
         hasMoved = false;
     }
 
-    public boolean checkValidMove(int x, int y) {
-        return false;
-    }
+    public abstract boolean checkValidMove(int x, int y);
 
     public boolean inCheck(int x, int y) {
         throw new Error("Piece is not a King");

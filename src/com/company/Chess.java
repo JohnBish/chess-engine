@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+//Fix capital double letters
 
 public class Chess {
     private static final Map<String, Class<? extends Piece>> PIECES = new HashMap<String, Class<? extends Piece>>() {{
@@ -39,15 +40,18 @@ public class Chess {
         put(false, "Black");
     }};
     private static final int[] BOARD_DIMENSIONS = new int[] {8, 8};
-    private static final String ANSI_BLACK_BACKGROUND = "\u001B[47m";
+    private static final String ANSI_GREY_BACKGROUND = "\u001B[47m";
+    private static final String ANSI_BLACK_BACKGROUND = "\u001b[40m";
     private static final String ANSI_RESET = "\u001B[0m";
 
     public static Piece[][] board;
     private static Scanner sc = new Scanner(System.in);
     private static int[] kingCoords = {4, 0, 4, 7}; //Keeps coordinates of Kings. White's coords are first
+    private static GUI gui;
 
     public static void main(String[] args) {
         board = initBoard();
+        gui = new GUI(); //Initializes GUI
         System.out.println("Welcome to Chess. At any time, type e to exit");
         mainLoop();
     }
@@ -123,13 +127,17 @@ public class Chess {
     }
 
     private static void renderBoard(boolean t) {
-        System.out.println("  a b c d e f g h");
+        System.out.println(t ? "  a b c d e f g h" : "  h g f e d c b a");
         for (int i = t ? board.length - 1 : 0; t ? i >= 0 : i < board.length; i += t ? -1 : 1) {
             System.out.print(ANSI_RESET);
             System.out.print(i + 1 + " ");
-            for (int j = 0; j < board[0].length; j++) {
+            for (int j = t ? 0 : board.length - 1; t ? j < board.length : j >= 0; j += t ? 1 : -1) {
                 if((i + j) % 2 == 0) {
-                    System.out.print(ANSI_BLACK_BACKGROUND);
+                    if(board[j][i] != null) {
+                        System.out.print(ANSI_GREY_BACKGROUND);
+                    } else {
+                        System.out.print(ANSI_BLACK_BACKGROUND);
+                    }
                 } else {
                     System.out.print(ANSI_RESET);
                 }
@@ -143,7 +151,11 @@ public class Chess {
             System.out.print(" " + (i + 1));
             System.out.print("\n");
         }
-        System.out.println("  a b c d e f g h");
+        System.out.println(t ? "  a b c d e f g h" : "  h g f e d c b a");
+    }
+
+    private static void renderBoardWithGui(boolean t) {
+
     }
 
     private static int[] parseCoords(String m) {
@@ -181,11 +193,18 @@ public class Chess {
         }
         int isPawn;
         try {
-            isPawn = Integer.parseInt(m.substring(1, 2));
+            Integer.parseInt(m.substring(1, 2));
+            if(m.length() == 2) {
+                Piece p = board[LETTERS.get(m.substring(0, 1))][Integer.parseInt(m.substring(1, 2)) - 1];
+                for(int i=0; c ? i < 2 : i > -2; i += c ? 1:-1) {
+                    if(board[LETTERS.get(m.substring(0, 1))][Integer.parseInt(m.substring(1, 2)) - 1 - i] != null &&
+                            board[LETTERS.get(m.substring(0, 1))][Integer.parseInt(m.substring(1, 2)) - 1 - i].checkValidMove(p.xPos, p.yPos)) {
+                        System.out.println("Yes");
+
+                    }
+                }
+            }
         } catch (NumberFormatException e) {
-            isPawn = 0;
-        }
-        if (isPawn == 0)
             switch (m.substring(0, 1)) {
                 case "K":
                 case "Q":
@@ -210,6 +229,7 @@ public class Chess {
                     m = m.substring(1);
                     m = NUMBERS.get(instances.get(numInstance).xPos) + (instances.get(numInstance).yPos + 1) + m;
             }
+        }
         return m;
     }
 
@@ -239,7 +259,7 @@ public class Chess {
     private static boolean checkValidPlay(boolean c, boolean t, int x, int y) {
         if (c) {
             Piece temp = board[x][y]; //Stores piece at move location to replace later
-            board[x][y] = new Piece(t, x, y);
+            board[x][y] = new Pawn(t, x, y);
             if (board[kingCoords[t ? 0 : 2]][kingCoords[t ? 1 : 3]].inCheck(kingCoords[t ? 0 : 2], kingCoords[t ? 1 : 3])) {
                 board[x][y] = temp;
                 return false;
