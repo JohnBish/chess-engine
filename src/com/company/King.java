@@ -46,15 +46,16 @@ public class King extends Piece{
                 if(validCastle) {
                     Chess.board[(deltaX > 0) ? 5:3][yPos] = Chess.board[(deltaX > 0) ? 7:0][yPos];
                     Chess.board[(deltaX > 0) ? 7:0][yPos] = null;
-                    System.out.println(Chess.COLOURS.get(isWhite) + " castles!");
+                    GUI.promptLabel.append(Chess.COLOURS.get(isWhite) + " castles!");
                     return true; //Castles
                 }
             }
         return false;
     }
 
+    //Checks if specified coordinates are threatened
     @Override
-    public boolean inCheck(int x, int y) { //Checks if specified coordinates are threatened
+    public boolean inCheck(int x, int y) {
         threatening.clear();
         for(int i = Chess.board.length - 1; i >= 0; i--) {
             for(int j = 0; j< Chess.board[0].length; j++) {
@@ -70,6 +71,7 @@ public class King extends Piece{
 
     @Override
     public boolean inCheckMate() {
+        //Checks if the king can get out of check
         for(int dx = -1; dx <= 1; dx++) {
             for(int dy = -1; dy <= 1; dy++) {
                 if(this.checkValidMove(xPos + dx, yPos + dy)) return false;
@@ -78,6 +80,7 @@ public class King extends Piece{
         if(threatening.size() > 1) {
             return true;
         } else {
+            //Makes a list of moves that would put the king out of check
             ArrayList<int[]> savingMoves = new ArrayList<>();
             int deltaX = xPos - threatening.get(0).xPos;
             int deltaY = yPos - threatening.get(0).yPos;
@@ -98,6 +101,8 @@ public class King extends Piece{
                     }
                 }
             }
+
+            //Checks if any of the saving moves are possible with any piece of correct colour
             for (int[] savingMove : savingMoves) {
                 for (int i = Chess.board.length - 1; i >= 0; i--) {
                     for (int j = 0; j < Chess.board[0].length; j++) {

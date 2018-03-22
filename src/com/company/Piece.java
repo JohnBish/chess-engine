@@ -14,6 +14,7 @@ public abstract class Piece {
         hasMoved = false;
     }
 
+    //Check if move is valid
     public abstract boolean checkValidMove(int x, int y);
 
     public boolean inCheck(int x, int y) {
